@@ -160,7 +160,7 @@
     }
 
     .nav-items.active {
-        right: 0;
+        right: -19;
     }
 
     .nav-items li a {
