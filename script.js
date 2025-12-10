@@ -26,21 +26,23 @@ sections.forEach(section => {
 // Hamburger Menu Toggle
 const hamburger = document.querySelector('.hamburger');
 const navItems = document.querySelector('.nav-items');
-const resumeBtn = document.querySelectorAll('.btn');
+const resumeBtnOutside = document.querySelector('.nav-sec > .btn'); // Only the button outside nav-items
 
 hamburger.addEventListener('click', () => {
     hamburger.classList.toggle('active');
     navItems.classList.toggle('active');
-    resumeBtn.forEach(btn => btn.classList.toggle('active'));
+    if (resumeBtnOutside) {
+        resumeBtnOutside.classList.toggle('active');
+    }
 });
 
-// Smooth Scroll to Section
-document.querySelectorAll('.nav-items li a').forEach(link => {
+// Smooth Scroll to Section and Close Menu
+document.querySelectorAll('.nav-items li a, .nav-items .btn').forEach(link => {
     link.addEventListener('click', (e) => {
         const href = link.getAttribute('href');
         
         // Only prevent default if it's an anchor link (starts with #)
-        if (href.startsWith('#')) {
+        if (href && href.startsWith('#')) {
             e.preventDefault();
             
             const targetId = href.substring(1);
@@ -63,6 +65,45 @@ document.querySelectorAll('.nav-items li a').forEach(link => {
         // Close hamburger menu
         hamburger.classList.remove('active');
         navItems.classList.remove('active');
-        resumeBtn.forEach(btn => btn.classList.remove('active'));
+        if (resumeBtnOutside) {
+            resumeBtnOutside.classList.remove('active');
+        }
+    });
+});
+
+// Add shadow to navbar on scroll
+window.addEventListener('scroll', () => {
+    const nav = document.querySelector('nav.container');
+    if (window.scrollY > 50) {
+        nav.classList.add('scrolled');
+    } else {
+        nav.classList.remove('scrolled');
+    }
+});
+
+// Highlight active nav link on scroll
+const sectionsForNav = document.querySelectorAll('section[id], .hero-section');
+const navLinks = document.querySelectorAll('.nav-items li a');
+
+window.addEventListener('scroll', () => {
+    let current = '';
+    
+    sectionsForNav.forEach(section => {
+        const sectionTop = section.offsetTop;
+        const sectionHeight = section.clientHeight;
+        
+        if (window.scrollY >= (sectionTop - 150)) {
+            current = section.getAttribute('id') || 'home';
+        }
+    });
+    
+    navLinks.forEach(link => {
+        link.classList.remove('active');
+        const href = link.getAttribute('href');
+        
+        if ((current === 'home' && href === '#') || 
+            (href === `#${current}`)) {
+            link.classList.add('active');
+        }
     });
 });
