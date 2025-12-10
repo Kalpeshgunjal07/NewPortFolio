@@ -248,6 +248,10 @@
         padding: 20px 0 !important;
     }
 
+    section#nav-sec {
+        padding: 0 !important;
+    }
+
     .timeline {
         padding-left: 0px;
     }
